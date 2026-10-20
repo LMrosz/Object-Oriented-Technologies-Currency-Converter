@@ -3,6 +3,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.helpers.DefaultHandler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -19,9 +20,9 @@ public class NbpXmlParser implements RatesParser {
             return currencies;
         }
         try {
-            Document doc = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder()
-                    .parse(new InputSource(new StringReader(data)));
+            DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            builder.setErrorHandler(new DefaultHandler());
+            Document doc = builder.parse(new InputSource(new StringReader(data)));
             NodeList pozycje = doc.getElementsByTagName("pozycja");
             for (int i = 0; i < pozycje.getLength(); i++) {
                 Element e = (Element) pozycje.item(i);
